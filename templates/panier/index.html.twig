@@ -8,18 +8,20 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Bought_at</th>
-                <th>State</th>
+                <th>{{'panier.date'|trans}}</th>
+                <th>{{'panier.state'|trans}}</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for panier in paniers %}
             <tr>
-                <td>{{ panier.id }}</td>
                 <td>{{ panier.boughtAt ? panier.boughtAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ panier.state ? 'Yes' : 'No' }}</td>
+                {% if panier.state is same as(true) %}
+                    <td><i class="fas fa-check"></i></td>
+                {% else %}
+                    <td><i class="fas fa-times"></i> }}</td>
+                {% endif %}
                 <td>
                     <a href="{{ path('panier_show', {'id': panier.id}) }}">show</a>
                     <a href="{{ path('panier_edit', {'id': panier.id}) }}">edit</a>
