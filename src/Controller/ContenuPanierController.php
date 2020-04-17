@@ -84,9 +84,13 @@ class ContenuPanierController extends AbstractController
     public function delete(Request $request, ContenuPanier $contenuPanier): Response
     {
         if ($this->isCsrfTokenValid('delete'.$contenuPanier->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($contenuPanier);
-            $entityManager->flush();
+            try{
+              $entityManager = $this->getDoctrine()->getManager();
+              $entityManager->remove($contenuPanier);
+              $entityManager->flush();
+            }catch(\Exception $e){
+                error_log($e->getMessage());
+            }
         }
 
         return $this->redirectToRoute('contenu_panier_index');

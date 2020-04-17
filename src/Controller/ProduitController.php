@@ -31,15 +31,20 @@ class ProduitController extends AbstractController
         $produit = new Produit();
         $form = $this->createForm(ProduitType::class, $produit);
         $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($produit);
-            $entityManager->flush();
+            try{
+              $entityManager->persist($produit);  // prepare
+              $entityManager->flush();            // execute
+              $this->addFlash("success", "Produit created");
+              return $this->redirectToRoute('produit_index');
+          }catch(\Exception $e){
+            error_log($e->getMessage());
 
-            return $this->redirectToRoute('produit_index');
+            return $this->redirectToRoute('produit_new');
         }
-
+    }
         return $this->render('produit/new.html.twig', [
             'produit' => $produit,
             'form' => $form->createView(),
@@ -63,17 +68,22 @@ class ProduitController extends AbstractController
     {
         $form = $this->createForm(ProduitType::class, $produit);
         $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('produit_index');
+            try{
+              $entityManager->persist($produit);  // prepare
+              $entityManager->flush();            // execute
+              $this->addFlash("success", "Produit updated");
+          }catch(\Exception $e){
+            error_log($e->getMessage());
         }
 
         return $this->render('produit/edit.html.twig', [
             'produit' => $produit,
             'form' => $form->createView(),
         ]);
+        }
     }
 
     /**
@@ -82,9 +92,14 @@ class ProduitController extends AbstractController
     public function delete(Request $request, Produit $produit): Response
     {
         if ($this->isCsrfTokenValid('delete'.$produit->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($produit);
-            $entityManager->flush();
+            try{
+              $entityManager = $this->getDoctrine()->getManager();
+              $entityManager->remove($produit);
+              $entityManager->flush();
+              $this->addFlash("success", "Produit deleted");
+            }catch(\Exception $e){
+                error_log($e->getMessage());
+            }
         }
 
         return $this->redirectToRoute('produit_index');
