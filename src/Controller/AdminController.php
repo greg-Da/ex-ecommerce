@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
- * @Route("/admin")
+ * @Route("/{_locale}/admin")
  */
 class AdminController extends AbstractController
 {

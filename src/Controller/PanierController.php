@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Panier;
+use App\Entity\ContenuPanier;
 use App\Form\PanierType;
 use App\Repository\PanierRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/panier")
+ * @Route("/{_locale}/panier")
  */
 class PanierController extends AbstractController
 {
@@ -51,10 +52,13 @@ class PanierController extends AbstractController
     /**
      * @Route("/{id}", name="panier_show", methods={"GET"})
      */
-    public function show(Panier $panier): Response
+    public function show(Panier $panier, Request $request, $id): Response
     {
+        $em = $this->getDoctrine()->getManager();
+        $articles = $em->getRepository(ContenuPanier::class)->findBy($id);
         return $this->render('panier/show.html.twig', [
             'panier' => $panier,
+            'articles' => $articles
         ]);
     }
 

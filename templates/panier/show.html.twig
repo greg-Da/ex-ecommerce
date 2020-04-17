@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Panier{% endblock %}
+{% block title %}{{'panier.title'|trans}}{% endblock %}
 
 {% block body %}
-    <h1>Panier</h1>
+    <h1>{{'panier.title'|trans}}</h1>
 
     <table class="table">
         <tbody>
@@ -12,12 +12,16 @@
                 <td>{{ panier.id }}</td>
             </tr>
             <tr>
-                <th>Bought_at</th>
+                <th>{{'panier.date'|trans}}</th>
                 <td>{{ panier.boughtAt ? panier.boughtAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
                 <th>State</th>
-                <td>{{ panier.state ? 'Yes' : 'No' }}</td>
+                {% if panier.state is same as(true) %}
+                    <td><i class="fas fa-check"></i></td>
+                {% else %}
+                    <td><i class="fas fa-times"></i> }}</td>
+                {% endif %}
             </tr>
         </tbody>
     </table>
