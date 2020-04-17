@@ -74,7 +74,7 @@ class ProduitController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $contenuPanier->setAddedAt(new \DateTime);
-            $product->setContenuPanier($contenuPanier);
+            $product->addContenuPanier($contenuPanier);
             $manager->persist($contenuPanier);
             $manager->flush();
             $this->addFlash("success", "Product added");        }

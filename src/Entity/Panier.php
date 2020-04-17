@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,7 +20,6 @@ class Panier
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="paniers")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
@@ -33,9 +34,14 @@ class Panier
     private $state;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ContenuPanier", inversedBy="panier")
+     * @ORM\OneToMany(targetEntity="App\Entity\ContenuPanier", mappedBy="panier", orphanRemoval=true)
      */
-    private $contenuPanier;
+    private $contenuPaniers;
+
+    public function __construct()
+    {
+        $this->contenuPaniers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -78,16 +84,34 @@ class Panier
         return $this;
     }
 
-    public function getContenuPanier(): ?ContenuPanier
+    /**
+     * @return Collection|ContenuPanier[]
+     */
+    public function getContenuPaniers(): Collection
     {
-        return $this->contenuPanier;
+        return $this->contenuPaniers;
     }
 
-    public function setContenuPanier(?ContenuPanier $contenuPanier): self
+    public function addContenuPanier(ContenuPanier $contenuPanier): self
     {
-        $this->contenuPanier = $contenuPanier;
+        if (!$this->contenuPaniers->contains($contenuPanier)) {
+            $this->contenuPaniers[] = $contenuPanier;
+            $contenuPanier->setPanier($this);
+        }
 
         return $this;
     }
 
+    public function removeContenuPanier(ContenuPanier $contenuPanier): self
+    {
+        if ($this->contenuPaniers->contains($contenuPanier)) {
+            $this->contenuPaniers->removeElement($contenuPanier);
+            // set the owning side to null (unless already changed)
+            if ($contenuPanier->getPanier() === $this) {
+                $contenuPanier->setPanier(null);
+            }
+        }
+
+        return $this;
+    }
 }

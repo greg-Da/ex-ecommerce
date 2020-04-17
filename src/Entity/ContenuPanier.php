@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,12 +17,14 @@ class ContenuPanier
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Produit", mappedBy="contenuPanier")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Produit", inversedBy="contenuPaniers")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $produit;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Panier", mappedBy="contenuPanier")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Panier", inversedBy="contenuPaniers")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $panier;
 
@@ -38,75 +38,31 @@ class ContenuPanier
      */
     private $added_at;
 
-    public function __construct()
-    {
-        $this->produit = new ArrayCollection();
-        $this->panier = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Collection|Produit[]
-     */
-    public function getProduit(): Collection
+    public function getProduit(): ?Produit
     {
         return $this->produit;
     }
 
-    public function addProduit(Produit $produit): self
+    public function setProduit(?Produit $produit): self
     {
-        if (!$this->produit->contains($produit)) {
-            $this->produit[] = $produit;
-            $produit->setContenuPanier($this);
-        }
+        $this->produit = $produit;
 
         return $this;
     }
 
-    public function removeProduit(Produit $produit): self
-    {
-        if ($this->produit->contains($produit)) {
-            $this->produit->removeElement($produit);
-            // set the owning side to null (unless already changed)
-            if ($produit->getContenuPanier() === $this) {
-                $produit->setContenuPanier(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Panier[]
-     */
-    public function getPanier(): Collection
+    public function getPanier(): ?Panier
     {
         return $this->panier;
     }
 
-    public function addPanier(Panier $panier): self
+    public function setPanier(?Panier $panier): self
     {
-        if (!$this->panier->contains($panier)) {
-            $this->panier[] = $panier;
-            $panier->setContenuPanier($this);
-        }
-
-        return $this;
-    }
-
-    public function removePanier(Panier $panier): self
-    {
-        if ($this->panier->contains($panier)) {
-            $this->panier->removeElement($panier);
-            // set the owning side to null (unless already changed)
-            if ($panier->getContenuPanier() === $this) {
-                $panier->setContenuPanier(null);
-            }
-        }
+        $this->panier = $panier;
 
         return $this;
     }
