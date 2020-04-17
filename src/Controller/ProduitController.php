@@ -62,27 +62,29 @@ class ProduitController extends AbstractController
     }
 
     /**
-     * @Route("/produit/{id}/edit", name="produit_edit", methods={"GET","POST"})
+     * @Route("/produit/edit/{id}", name="produit_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Produit $produit): Response
-    {
-        $form = $this->createForm(ProduitType::class, $produit);
-        $form->handleRequest($request);
-        $entityManager = $this->getDoctrine()->getManager();
+    public function modifproduit(Produit $produit=null, Request $request){
+        if ($produit !=null){
+            $form= $this->createForm(ProduitType::class, $produit);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()){
+                $pdo = $this->getDoctrine()->getManager();
+                $pdo->persist($produit);
+                $pdo->flush();
+                $this->addFlash("success", "Produit Modifié");
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            try{
-              $entityManager->persist($produit);  // prepare
-              $entityManager->flush();            // execute
-              $this->addFlash("success", "Produit updated");
-          }catch(\Exception $e){
-            error_log($e->getMessage());
+            }
+
+            return $this->render('produit/edit.html.twig', [
+                'produit' => $produit,
+                'form'=>$form -> createView()
+
+            ]);
         }
 
-        return $this->render('produit/edit.html.twig', [
-            'produit' => $produit,
-            'form' => $form->createView(),
-        ]);
+        else{
+            return $this->redirectToRoute('produit_index');
         }
     }
 
