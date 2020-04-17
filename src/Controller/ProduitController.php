@@ -10,9 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/produit")
- */
+
 class ProduitController extends AbstractController
 {
     /**
@@ -26,7 +24,7 @@ class ProduitController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="produit_new", methods={"GET","POST"})
+     * @Route("/produit/new", name="produit_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -49,7 +47,7 @@ class ProduitController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="produit_show", methods={"GET"})
+     * @Route("/produit/{id}", name="produit_show", methods={"GET"})
      */
     public function show(Produit $produit): Response
     {
@@ -59,7 +57,7 @@ class ProduitController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="produit_edit", methods={"GET","POST"})
+     * @Route("/produit/{id}/edit", name="produit_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Produit $produit): Response
     {
@@ -79,7 +77,7 @@ class ProduitController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="produit_delete", methods={"DELETE"})
+     * @Route("/produit/{id}", name="produit_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Produit $produit): Response
     {
