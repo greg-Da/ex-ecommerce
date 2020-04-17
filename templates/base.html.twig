@@ -14,11 +14,7 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ path('contenu_panier_index') }}">Panier</a>
         </li>
-        {% if is_granted('ROLE_ADMIN') %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('admin') }}">Admin</a>
-            </li>
-        {% endif %}
+
         {% if app.user is null %}
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('app_register') }}">Register</a>
@@ -28,7 +24,15 @@
             </li>
         {% else %}
             <li class="nav-item">
+                <a class="nav-link" href="{{ path('compte',{'id':app.user.id}) }}">Mon Compte</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+            </li>
+        {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('admin') }}">Admin</a>
             </li>
         {% endif %}
     </ul>
