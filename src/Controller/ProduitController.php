@@ -73,7 +73,7 @@ class ProduitController extends AbstractController
     }
 
     /**
-     * @Route("/produit/{id}", name="produit_show", methods={"GET"})
+     * @Route("/produit/{id}", name="produit_show", methods={"GET","POST"})
      */
     public function show($id,ProduitRepository $repo,ContenuPanier $contenuPanier = null,Request $request, Produit $produit): Response
     {
@@ -97,6 +97,7 @@ class ProduitController extends AbstractController
 
         return $this->render('produit/show.html.twig', [
             'produit' => $produit,
+            'formCart' => $form->createView()
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\ContenuPanier;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,7 +14,7 @@ class ContenuPanierType extends AbstractType
     {
         $builder
             ->add('quantity')
-            ->add('added_at')
+            ->add('Add-cart', SubmitType::class);
         ;
     }
 

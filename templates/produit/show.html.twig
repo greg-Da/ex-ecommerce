@@ -30,6 +30,11 @@
         </tbody>
     </table>
 
+    <div>
+    <h4>{{'Add-cart'|trans}} :</h4>
+    {{form(formCart)}}
+    </div>
+
     <a href="{{ path('produit_index') }}">back to list</a>
     {% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('produit_edit', {'id': produit.id}) }}">edit</a>
