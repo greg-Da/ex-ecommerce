@@ -24,7 +24,7 @@ class Panier
     private $user;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime",nullable=true)
      */
     private $bought_at;
 

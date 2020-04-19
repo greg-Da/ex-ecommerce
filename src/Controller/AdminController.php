@@ -32,7 +32,7 @@ class AdminController extends AbstractController
     public function editrole(User $user = null){
         if ($user == null){
             $this->addFlash('error', 'Utilisateur introuvable');
-            return $this->redirectToRoute('pays');
+            return $this->redirectToRoute('produit_index');
         }
 
         if ($user->hasRole('ROLE_ADMIN')){

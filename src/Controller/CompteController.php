@@ -12,16 +12,14 @@ class CompteController extends AbstractController
     /**
      * @Route("/compte/{id}", name="compte")
      */
-    public function index(User $user, Request $request)
+    public function index(User $user, Request $request,$id)
     {
-                $pdo = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository(User::class)->findOneById($id);
 
-                $user = $pdo->getRepository(User::class)->findAll();;
-
-            return $this->render('compte/index.html.twig', [
-                'user' => $user,
-
-            ]);
+        return $this->render('compte/index.html.twig', [
+            'user' => $users,
+        ]);
 
     }
 }

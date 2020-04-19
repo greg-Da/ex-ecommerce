@@ -8,6 +8,7 @@ use App\Entity\Produit;
 use App\Form\ProduitType;
 use App\Repository\ProduitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -72,7 +73,21 @@ class ProduitController extends AbstractController
         $form -> handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $fichier = $form->get('photoupload')->getData();
+            if ($fichier){
+                $nomFichier= uniqid().'.'.$fichier->guessExtension();
+                try {
+                    $fichier->move(
+                        $this->getParameter('upload_dir'),
+                        $nomFichier
+                    );
+                }
+                catch (FileException $e){
+                    $this->addFlash('danger', "Impossiple d'uploader le fichier");
+                    return $this->redirectToRoute('produit');
+                }
+                $produit->setPhoto($nomFichier);
+            }
             $contenuPanier->setAddedAt(new \DateTime);
             $product->addContenuPanier($contenuPanier);
             $manager->persist($contenuPanier);
