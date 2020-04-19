@@ -40,6 +40,21 @@ class ProduitController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $fichier = $form->get('photoupload')->getData();
+            if ($fichier){
+                $nomFichier= uniqid().'.'.$fichier->guessExtension();
+                try {
+                    $fichier->move(
+                        $this->getParameter('upload_dir'),
+                        $nomFichier
+                    );
+                }
+                catch (FileException $e){
+                    $this->addFlash('danger', "Impossiple d'uploader le fichier");
+                    return $this->redirectToRoute('produit_index');
+                }
+                $produit->setPhoto($nomFichier);
+            }
             try{
               $entityManager->persist($produit);  // prepare
               $entityManager->flush();            // execute
@@ -73,21 +88,7 @@ class ProduitController extends AbstractController
         $form -> handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $fichier = $form->get('photoupload')->getData();
-            if ($fichier){
-                $nomFichier= uniqid().'.'.$fichier->guessExtension();
-                try {
-                    $fichier->move(
-                        $this->getParameter('upload_dir'),
-                        $nomFichier
-                    );
-                }
-                catch (FileException $e){
-                    $this->addFlash('danger', "Impossiple d'uploader le fichier");
-                    return $this->redirectToRoute('produit');
-                }
-                $produit->setPhoto($nomFichier);
-            }
+
             $contenuPanier->setAddedAt(new \DateTime);
             $product->addContenuPanier($contenuPanier);
             $manager->persist($contenuPanier);
