@@ -36,7 +36,13 @@ class AdminController extends AbstractController
         }
 
         if ($user->hasRole('ROLE_ADMIN')){
-            $user->setRoles(['ROLE_USER']);
+            $user->setRoles(['ROLE_USER','ROLE_ADMIN','ROLE_SUPER_ADMIN']);
+        }
+        elseif ($user->hasRole(['ROLE_USER','ROLE_ADMIN'])){
+            $user->setRoles(['ROLE_USER']); ;
+        }
+        elseif ($user->hasRole(['ROLE_USER','ROLE_ADMIN','ROLE_SUPER_ADMIN'])){
+            $user->setRoles(['ROLE_USER','ROLE_ADMIN']);
         }
         else{
             $user->setRoles(['ROLE_USER','ROLE_ADMIN']);

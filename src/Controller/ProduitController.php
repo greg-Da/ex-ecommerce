@@ -109,6 +109,21 @@ class ProduitController extends AbstractController
             $form= $this->createForm(ProduitType::class, $produit);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()){
+                $fichier = $form->get('photoupload')->getData();
+                if ($fichier){
+                    $nomFichier= uniqid().'.'.$fichier->guessExtension();
+                    try {
+                        $fichier->move(
+                            $this->getParameter('upload_dir'),
+                            $nomFichier
+                        );
+                    }
+                    catch (FileException $e){
+                        $this->addFlash('danger', "Impossiple d'uploader le fichier");
+                        return $this->redirectToRoute('produit_index');
+                    }
+                    $produit->setPhoto($nomFichier);
+                }
                 $pdo = $this->getDoctrine()->getManager();
                 $pdo->persist($produit);
                 $pdo->flush();
