@@ -16,7 +16,7 @@ class AdminController extends AbstractController
      * @Route("/", name="admin")
      */
     public function index()
-    {
+    {//recuperation des infos de user dans la bdd
         $em = $this->getDoctrine()->getManager();
         $users = $em->getRepository(User::class)->findAll();
 
@@ -25,7 +25,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-
+//modification des roles
     /**
      * @Route("/editrole/{id}", name="editrole")
      */

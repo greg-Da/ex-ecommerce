@@ -8,6 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/{_locale}")
+ */
+
 class CompteController extends AbstractController
 {
     /**
@@ -15,6 +19,7 @@ class CompteController extends AbstractController
      */
     public function index(User $user, Request $request,$id, PanierRepository $panierRepository)
     {
+        //recuperation du l'id du user pour recuperer les bonnes infos
         $em = $this->getDoctrine()->getManager();
         $users = $em->getRepository(User::class)->findOneById($id);
 

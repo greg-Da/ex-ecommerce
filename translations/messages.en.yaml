@@ -31,8 +31,22 @@ produit:
     title: "Products"
     create: "Create product"
     addCart: "Select quantity to add to cart"
+    delete: "Product Deleted"
+    modify: "Product Modify"
+    add: "Product Add"
+    impossible: "Impossible to Add"
 
 Error:
     e403: Where are you going ? It's forbidden
     e404: Are you lost ?
     e405: You broke it !
+
+Compte:
+    name: Name
+    lastname: Lastname
+    email: E-mail
+    price: Price
+    date: Date of Bought
+
+Cart:
+    added: 'Added to Cart'

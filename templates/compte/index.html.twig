@@ -7,9 +7,9 @@
     <table class="table">
         <thead>
         <tr>
-            <th>Nom</th>
-            <th>Prenom</th>
-            <th>Adresse E-mail</th>
+            <th>{{'Compte.name'|trans}}</th>
+            <th>{{'Compte.lastname'|trans}}</th>
+            <th>{{ 'Compte.email'| trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -26,16 +26,18 @@
 
         <thead>
         <tr>
-            <th>Montant</th>
-            <th>Date de commande</th>
+            <th>{{'Compte.price'|trans}}</th>
+            <th>{{'Compte.date'|trans}}</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>{% for contenu in paniers.contenuPaniers %}
-                    {% set total = 0 %}{% set totalProduit = 0 %}
+            <td>{% set total = 0 %}
+                {% set totalProduit = 0 %}
+                {% for contenu in paniers.contenuPaniers %}
                     {% set totalProduit = contenu.quantity * contenu.produit.price %}
-                    {% set total = totalProduit  %}{{ total }}{% endfor %}$</td>
+                    {% set total = total + totalProduit %}
+                    {% set total = totalProduit  %}{% endfor %}{{total}}$</td>
             <td>{% for panier in paniers %}{{ panier.boughtAt | date("d/m/Y") }}{% endfor %}</td>
         </tr>
         </tbody>
