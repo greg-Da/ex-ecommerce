@@ -26,79 +26,6 @@ class PanierController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="panier_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $panier = new Panier();
-        $form = $this->createForm(PanierType::class, $panier);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($panier);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('panier_index');
-        }
-
-        return $this->render('panier/new.html.twig', [
-            'panier' => $panier,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="panier_show", methods={"GET"})
-     */
-    public function show(Panier $panier, Request $request, $id): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $articles = $em->getRepository(ContenuPanier::class)->findBy($id);
-        return $this->render('panier/show.html.twig', [
-            'panier' => $panier,
-            'articles' => $articles
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="panier_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Panier $panier): Response
-    {
-        $form = $this->createForm(PanierType::class, $panier);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('panier_index');
-        }
-
-        return $this->render('panier/edit.html.twig', [
-            'panier' => $panier,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="panier_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, ContenuPanier $contenuPanier): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$contenuPanier->getId(), $request->request->get('_token'))) {
-            try{
-              $entityManager = $this->getDoctrine()->getManager();
-              $entityManager->remove($contenuPanier);
-              $entityManager->flush();
-            }catch(\Exception $e){
-                error_log($e->getMessage());
-            }
-        }
-
-        return $this->redirectToRoute('panier_index');
-    }
 
     /**
      * @Route("/panier/buy",name="buy")
@@ -113,6 +40,7 @@ class PanierController extends AbstractController
             ->setBoughtAt(new \DateTime());
         $entityManager->persist($panier);
         $entityManager->flush();
+        $this->addFlash("success", "Done"); 
         
         return $this->redirectToRoute('produit_index');
     }

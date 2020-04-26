@@ -15,38 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ContenuPanierController extends AbstractController
 {
-    /**
-     * @Route("/", name="contenu_panier_index", methods={"GET"})
-     */
-    public function index(ContenuPanierRepository $contenuPanierRepository): Response
-    {
-        return $this->render('contenu_panier/index.html.twig', [
-            'contenu_paniers' => $contenuPanierRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="contenu_panier_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $contenuPanier = new ContenuPanier();
-        $form = $this->createForm(ContenuPanierType::class, $contenuPanier);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($contenuPanier);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('contenu_panier_index');
-        }
-
-        return $this->render('contenu_panier/new.html.twig', [
-            'contenu_panier' => $contenuPanier,
-            'form' => $form->createView(),
-        ]);
-    }
 
     /**
      * @Route("/{id}", name="contenu_panier_show", methods={"GET"})
