@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SuperAdminController!{% endblock %}
+
+{% block body %}
+<h2>Listing panier </h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Utilisateur</th>
+            <th>Numero de panier</th>
+            <th>Contenu du panier</th>
+        </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+<h2>Nombre d'utilisateur</h2>
+    {% if users is not empty %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Email</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.nom }}</td>
+                    <td>{{ user.prenom }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

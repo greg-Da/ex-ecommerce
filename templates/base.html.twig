@@ -35,6 +35,11 @@
                 <a class="nav-link" href="{{ path('admin') }}">Admin</a>
             </li>
         {% endif %}
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('super_admin') }}">Super Admin</a>
+            </li>
+        {% endif %}
     </ul>
     <div class="container">
         {% for type, messages in app.flashes %}
