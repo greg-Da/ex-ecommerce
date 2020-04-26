@@ -3,7 +3,7 @@
 {% block title %}Hello CompteController!{% endblock %}
 
 {% block body %}
-
+<!--  -->
     <table class="table">
         <thead>
         <tr>
@@ -18,8 +18,26 @@
                 <td>{{ user.prenom }}</td>
                 <td>{{ user.email }}</td>
             </tr>
-
         </tbody>
-</table>
+    </table>
+    <h2>Mes Commandes</h2>
 
+    <table class="table">
+
+        <thead>
+        <tr>
+            <th>Montant</th>
+            <th>Date de commande</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{% for contenu in paniers.contenuPaniers %}
+                    {% set total = 0 %}{% set totalProduit = 0 %}
+                    {% set totalProduit = contenu.quantity * contenu.produit.price %}
+                    {% set total = totalProduit  %}{{ total }}{% endfor %}$</td>
+            <td>{% for panier in paniers %}{{ panier.boughtAt | date("d/m/Y") }}{% endfor %}</td>
+        </tr>
+        </tbody>
+    </table>
 {% endblock %}
