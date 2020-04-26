@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/{_locale}/panier")
@@ -30,7 +31,7 @@ class PanierController extends AbstractController
     /**
      * @Route("/panier/buy",name="buy")
      */
-    public function buy(PanierRepository $panierRepository)
+    public function buy(PanierRepository $panierRepository,TranslatorInterface $translator)
     {
         $panier = $panierRepository ->findOneBy(['user' => $this->getUser(), 'state' => false]);
         $entityManager = $this->getDoctrine()->getManager();
@@ -40,7 +41,7 @@ class PanierController extends AbstractController
             ->setBoughtAt(new \DateTime());
         $entityManager->persist($panier);
         $entityManager->flush();
-        $this->addFlash("success", "Done"); 
+        $this->addFlash("success", $translator->trans('Cart.added'));
         
         return $this->redirectToRoute('produit_index');
     }

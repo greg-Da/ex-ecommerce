@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/{_locale}")
@@ -77,7 +78,7 @@ class ProduitController extends AbstractController
     /**
      * @Route("/produit/{id}", name="produit_show", methods={"GET","POST"})
      */
-    public function show($id,ProduitRepository $repo,ContenuPanier $contenuPanier = null,Request $request, Produit $produit, PanierRepository $panierRepository): Response
+    public function show($id,ProduitRepository $repo,ContenuPanier $contenuPanier = null,Request $request, Produit $produit, PanierRepository $panierRepository,TranslatorInterface $translator): Response
     {
         $manager = $this->getDoctrine()->getManager();
         $product = $repo->find($id);
@@ -103,7 +104,7 @@ class ProduitController extends AbstractController
             $product->addContenuPanier($contenuPanier);
             $manager->persist($contenuPanier);
             $manager->flush();
-            $this->addFlash("success", "Product added");        }
+            $this->addFlash("success", $translator->trans('produit.add'));        }
 
         return $this->render('produit/show.html.twig', [
             'produit' => $produit,
@@ -114,7 +115,7 @@ class ProduitController extends AbstractController
     /**
      * @Route("/produit/edit/{id}", name="produit_edit", methods={"GET","POST"})
      */
-    public function modifproduit(Produit $produit=null, Request $request){
+    public function modifproduit(Produit $produit=null, Request $request,TranslatorInterface $translator){
         if ($produit !=null){
             $form= $this->createForm(ProduitType::class, $produit);
             $form->handleRequest($request);
@@ -129,7 +130,7 @@ class ProduitController extends AbstractController
                         );
                     }
                     catch (FileException $e){
-                        $this->addFlash('danger', "Impossiple d'uploader le fichier");
+                        $this->addFlash('danger', $translator->trans('produit.impossible'));
                         return $this->redirectToRoute('produit_index');
                     }
                     $produit->setPhoto($nomFichier);
@@ -137,7 +138,7 @@ class ProduitController extends AbstractController
                 $pdo = $this->getDoctrine()->getManager();
                 $pdo->persist($produit);
                 $pdo->flush();
-                $this->addFlash("success", "Produit Modifié");
+                $this->addFlash("success", $translator->trans('produit.modify'));
 
             }
 
@@ -156,14 +157,14 @@ class ProduitController extends AbstractController
     /**
      * @Route("/produit/{id}", name="produit_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Produit $produit): Response
+    public function delete(Request $request, Produit $produit,TranslatorInterface $translator): Response
     {
         if ($this->isCsrfTokenValid('delete'.$produit->getId(), $request->request->get('_token'))) {
             try{
               $entityManager = $this->getDoctrine()->getManager();
               $entityManager->remove($produit);
               $entityManager->flush();
-              $this->addFlash("success", "Produit deleted");
+              $this->addFlash("success", $translator->trans('produit.delete'));
             }catch(\Exception $e){
                 error_log($e->getMessage());
             }

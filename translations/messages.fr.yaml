@@ -34,6 +34,10 @@ produit:
     title: "Produits"
     create: "Créer un produit"
     addCart: "Selectioner la quantité à ajouter"
+    delete: "Produit Supprimer"
+    modify: "Produit Supprimer"
+    add: "Produit Ajouté"
+    impossible: "Impossible à Ajouter"
 
 Error:
     e403: Tu vas où ? C'est interdit
