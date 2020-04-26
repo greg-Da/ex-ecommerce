@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SuperAdminController extends AbstractController
 {
+    //recuperation des infos des differentes tables pour l'affichage des infos
     /**
      * @Route("/", name="super_admin")
      */
