@@ -21,6 +21,7 @@ class PanierController extends AbstractController
      */
     public function index(PanierRepository $panierRepository): Response
     {
+        //search for a cart belonging to the user with a state == false
         return $this->render('panier/index.html.twig', [
             'paniers' => $panierRepository->findOneBy(['user'=> $this->getUser(), 'state'=> false]),
         ]);
@@ -32,9 +33,11 @@ class PanierController extends AbstractController
      */
     public function buy(PanierRepository $panierRepository)
     {
+         //search for a cart belonging to the user with a state == false
         $panier = $panierRepository ->findOneBy(['user' => $this->getUser(), 'state' => false]);
         $entityManager = $this->getDoctrine()->getManager();
 
+        //pass the 'state' to true and add the time at 'boughtAt'
         $panier
             ->setState(true)
             ->setBoughtAt(new \DateTime());

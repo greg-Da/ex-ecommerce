@@ -26,6 +26,7 @@ class ProduitController extends AbstractController
      */
     public function index(ProduitRepository $produitRepository): Response
     {
+        //search and display all product
         return $this->render('produit/index.html.twig', [
             'produits' => $produitRepository->findAll(),
         ]);
@@ -36,21 +37,27 @@ class ProduitController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        //create a new product 
         $produit = new Produit();
         $form = $this->createForm(ProduitType::class, $produit);
         $form->handleRequest($request);
         $entityManager = $this->getDoctrine()->getManager();
 
+        // if the form is valid it will persist
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // if there is a picture process the information and create it s name
             $fichier = $form->get('photoupload')->getData();
             if ($fichier){
                 $nomFichier= uniqid().'.'.$fichier->guessExtension();
+                // move the picture to the right repositery
                 try {
                     $fichier->move(
                         $this->getParameter('upload_dir'),
                         $nomFichier
                     );
                 }
+                //in case of an error it will display a message
                 catch (FileException $e){
                     $this->addFlash('danger', "Impossiple d'uploader le fichier");
                     return $this->redirectToRoute('produit_index');
@@ -62,6 +69,7 @@ class ProduitController extends AbstractController
               $entityManager->flush();            // execute
               $this->addFlash("success", "Produit created");
               return $this->redirectToRoute('produit_index');
+                //in case of an error it will display a message
           }catch(\Exception $e){
             error_log($e->getMessage());
 
@@ -80,22 +88,28 @@ class ProduitController extends AbstractController
     public function show($id,ProduitRepository $repo,ContenuPanier $contenuPanier = null,Request $request, Produit $produit, PanierRepository $panierRepository): Response
     {
         $manager = $this->getDoctrine()->getManager();
+        //search for the article
         $product = $repo->find($id);
+        //search for the cart of the user
         $panier = $panierRepository->findOneBy(['user'=> $this->getUser(), 'state'=>false]);
         
+        //if the user doesn t have a cart we create it for him
         if ($panier == null){
             $panier = new Panier();
             $panier->setUser($this->getUser());
             $manager->persist($panier);
         }
 
+        //if the user doesn t have a cart-slot for the article we create it for him
         if ($contenuPanier == null ) {
             $contenuPanier = new ContenuPanier;
         }
        
+        //create the form
         $form = $this->createForm(ContenuPanierType::class, $contenuPanier);
         $form -> handleRequest($request);
 
+        //if the form is valid we set the date and link the cart slot to the cart
         if ($form->isSubmitted() && $form->isValid()) {
 
             $contenuPanier->setAddedAt(new \DateTime)
@@ -103,7 +117,8 @@ class ProduitController extends AbstractController
             $product->addContenuPanier($contenuPanier);
             $manager->persist($contenuPanier);
             $manager->flush();
-            $this->addFlash("success", "Product added");        }
+            $this->addFlash("success", "Product added"); 
+        }
 
         return $this->render('produit/show.html.twig', [
             'produit' => $produit,
@@ -115,19 +130,25 @@ class ProduitController extends AbstractController
      * @Route("/produit/edit/{id}", name="produit_edit", methods={"GET","POST"})
      */
     public function modifproduit(Produit $produit=null, Request $request){
+        //check if the product is not not null
         if ($produit !=null){
             $form= $this->createForm(ProduitType::class, $produit);
             $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()){
+            // if the form is valid it will persist
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // if there is a picture process the information and create it s name
                 $fichier = $form->get('photoupload')->getData();
                 if ($fichier){
                     $nomFichier= uniqid().'.'.$fichier->guessExtension();
+                // move the picture to the right repositery
                     try {
                         $fichier->move(
                             $this->getParameter('upload_dir'),
                             $nomFichier
                         );
                     }
+                //in case of an error it will display a message
                     catch (FileException $e){
                         $this->addFlash('danger', "Impossiple d'uploader le fichier");
                         return $this->redirectToRoute('produit_index');
@@ -158,11 +179,13 @@ class ProduitController extends AbstractController
      */
     public function delete(Request $request, Produit $produit): Response
     {
+        //try to delete the contenuPanier
         if ($this->isCsrfTokenValid('delete'.$produit->getId(), $request->request->get('_token'))) {
             try{
               $entityManager = $this->getDoctrine()->getManager();
               $entityManager->remove($produit);
               $entityManager->flush();
+        //if it fails, a error message will be displayed
               $this->addFlash("success", "Produit deleted");
             }catch(\Exception $e){
                 error_log($e->getMessage());
