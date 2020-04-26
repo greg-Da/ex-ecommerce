@@ -3,17 +3,17 @@
 {% block title %}Panier index{% endblock %}
 
 {% block body %}
-    <h1>Panier index</h1>
+    <h1>Panier</h1>
 
+{% if paniers is not empty %}
     <table class="table">
         <thead>
             <tr>
-                <td>{{'table.product'|trans}}</td>
+                <td>{{'produit.title'|trans}}</td>
                 <td>{{'table.quantity'|trans}}</td>
                 <td>{{'table.price'|trans}}</td>
-                <td>{{'table.amount'|trans}}</td>
-                <td>{{'table.action'|trans}}</td>
-                <th>Actions</th>
+                <td>Total</td>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -30,19 +30,19 @@
                     <td>{{contenu.produit.name}}</td>
                     <td>{{contenu.quantity}}</td>
                     <td>{{contenu.produit.price}} $</td>
-                    <td>{{contenu.quantity}}</td>
                     <td>{{totalProduit}} $</td>
                     <td><a href="{{path('contenu_panier_delete', {id:contenu.id})}}" class="btn btn-danger">{{'Delete'|trans}}</a></td>
 
                 </tr>
             {% endfor %}
-                    <a href="{{ path('panier_show', {'id': paniers.id}) }}">show</a>
-                    <a href="{{ path('panier_edit', {'id': paniers.id}) }}">edit</a>
-                </td>
+                
             </tr>
 
         </tbody>
     </table>
-
-    <a href="{{ path('panier_new') }}">Create new</a>
+    <p>{{'panier.productTotal'|trans}} {{total}} $</p>
+    <a class="btn btn-primary" href="{{path('buy')}}">{{'table.buy'|trans}}</a>
+{% else %}
+<p>{{'panier.empty'|trans}}</p>
+{% endif %}
 {% endblock %}

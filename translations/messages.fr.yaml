@@ -18,13 +18,17 @@ table:
     name: Nom
     quantity: Quantité
     price: Prix
+    buy: Commandé
+
 
 
 panier:
     title: "Panier"
     date: "Ajouter le :"
-    productTotal: "produits dans le panier"
+    productTotal: "Prix total :"
     state: "Payé"
+    empty: Panier vide
+
 
 produit:
     title: "Produits"

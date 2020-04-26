@@ -18,13 +18,15 @@ table:
     name: Name
     quantity: Quantity
     price: Price
+    buy: Command
 
 
 panier:
     title: "Cart"
     date: "Added at :"
     state: "Paid"
-    productTotal: "products in the cart"
+    productTotal: "Total Price :"
+    empty: Nothing in the cart
 
 produit:
     title: "Products"

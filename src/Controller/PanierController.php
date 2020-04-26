@@ -85,14 +85,35 @@ class PanierController extends AbstractController
     /**
      * @Route("/{id}", name="panier_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Panier $panier): Response
+    public function delete(Request $request, ContenuPanier $contenuPanier): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$panier->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($panier);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$contenuPanier->getId(), $request->request->get('_token'))) {
+            try{
+              $entityManager = $this->getDoctrine()->getManager();
+              $entityManager->remove($contenuPanier);
+              $entityManager->flush();
+            }catch(\Exception $e){
+                error_log($e->getMessage());
+            }
         }
 
         return $this->redirectToRoute('panier_index');
+    }
+
+    /**
+     * @Route("/panier/buy",name="buy")
+     */
+    public function buy(PanierRepository $panierRepository)
+    {
+        $panier = $panierRepository ->findOneBy(['user' => $this->getUser(), 'state' => false]);
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $panier
+            ->setState(true)
+            ->setBoughtAt(new \DateTime());
+        $entityManager->persist($panier);
+        $entityManager->flush();
+        
+        return $this->redirectToRoute('produit_index');
     }
 }

@@ -93,6 +93,6 @@ class ContenuPanierController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('contenu_panier_index');
+        return $this->redirectToRoute('panier_index');
     }
 }
