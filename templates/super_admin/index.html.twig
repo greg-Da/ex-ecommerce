@@ -8,17 +8,18 @@
         <thead>
         <tr>
             <th>Utilisateur</th>
-            <th>Numero de panier</th>
             <th>Contenu du panier</th>
         </tr>
         </thead>
         <tbody>
+            {% for panier in paniers  %}
 
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ panier.user }}</td>
+                <td>{% for contenu in contenu_paniers %}{{ contenu.produit.name }}, {% endfor %}</td>
             </tr>
+
+            {% endfor %}
         </tbody>
     </table>
 <h2>Nombre d'utilisateur</h2>

@@ -90,4 +90,6 @@ class ContenuPanier
 
         return $this;
     }
+
+
 }
