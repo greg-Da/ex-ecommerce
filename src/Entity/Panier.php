@@ -31,7 +31,7 @@ class Panier
     /**
      * @ORM\Column(type="boolean")
      */
-    private $state;
+    private $state = false;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ContenuPanier", mappedBy="panier", orphanRemoval=true)

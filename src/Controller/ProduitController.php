@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\ContenuPanier;
+use App\Entity\Panier;
 use App\Form\ContenuPanierType;
 use App\Entity\Produit;
 use App\Form\ProduitType;
+use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -75,21 +77,29 @@ class ProduitController extends AbstractController
     /**
      * @Route("/produit/{id}", name="produit_show", methods={"GET","POST"})
      */
-    public function show($id,ProduitRepository $repo,ContenuPanier $contenuPanier = null,Request $request, Produit $produit): Response
+    public function show($id,ProduitRepository $repo,ContenuPanier $contenuPanier = null,Request $request, Produit $produit, PanierRepository $panierRepository): Response
     {
+        $manager = $this->getDoctrine()->getManager();
         $product = $repo->find($id);
+        $panier = $panierRepository->findOneBy(['user'=> $this->getUser(), 'state'=>false]);
+        
+        if ($panier == null){
+            $panier = new Panier();
+            $panier->setUser($this->getUser());
+            $manager->persist($panier);
+        }
 
         if ($contenuPanier == null ) {
             $contenuPanier = new ContenuPanier;
         }
-        $manager = $this->getDoctrine()->getManager();
-
+       
         $form = $this->createForm(ContenuPanierType::class, $contenuPanier);
         $form -> handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $contenuPanier->setAddedAt(new \DateTime);
+            $contenuPanier->setAddedAt(new \DateTime)
+                          ->setPanier($panier);
             $product->addContenuPanier($contenuPanier);
             $manager->persist($contenuPanier);
             $manager->flush();

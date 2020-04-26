@@ -8,36 +8,39 @@
     <table class="table">
         <thead>
             <tr>
-                <th>{{'table.name'|trans}}</th>
-                <th>{{'table.quantity'|trans}}</th>
-                <th>{{'panier.date'|trans}}</th>
-                <th>{{'panier.state'|trans}}</th>
+                <td>{{'table.product'|trans}}</td>
+                <td>{{'table.quantity'|trans}}</td>
+                <td>{{'table.price'|trans}}</td>
+                <td>{{'table.amount'|trans}}</td>
+                <td>{{'table.action'|trans}}</td>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for panier in paniers %}
-            {% for panier in paniers %}
+
+        {% set total = 0 %}
+        {% set totalProduit = 0 %}
+        {% for contenu in paniers.contenuPaniers %}
+            
+
+                {% set totalProduit = contenu.quantity * contenu.produit.price %}
+                {% set total = total + totalProduit %}
+        
                 <tr>
-                    <td>{{ panier.contenu_panier.produit.nom }}</td>
-                    <td>{{ panier.contenu_panier.quantity }}</td>
-            {% endfor %}   
-                <td>{{ panier.boughtAt ? panier.boughtAt|date('Y-m-d H:i:s') : '' }}</td>
-                {% if panier.state is same as(true) %}
-                    <td><i class="fas fa-check"></i></td>
-                {% else %}
-                    <td><i class="fas fa-times"></i> }}</td>
-                {% endif %}
-                <td>
-                    <a href="{{ path('panier_show', {'id': panier.id}) }}">show</a>
-                    <a href="{{ path('panier_edit', {'id': panier.id}) }}">edit</a>
+                    <td>{{contenu.produit.name}}</td>
+                    <td>{{contenu.quantity}}</td>
+                    <td>{{contenu.produit.price}} $</td>
+                    <td>{{contenu.quantity}}</td>
+                    <td>{{totalProduit}} $</td>
+                    <td><a href="{{path('contenu_panier_delete', {id:contenu.id})}}" class="btn btn-danger">{{'Delete'|trans}}</a></td>
+
+                </tr>
+            {% endfor %}
+                    <a href="{{ path('panier_show', {'id': paniers.id}) }}">show</a>
+                    <a href="{{ path('panier_edit', {'id': paniers.id}) }}">edit</a>
                 </td>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
+
         </tbody>
     </table>
 
