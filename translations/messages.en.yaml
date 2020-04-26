@@ -30,3 +30,8 @@ produit:
     title: "Products"
     create: "Create product"
     addCart: "Select quantity to add to cart"
+
+Error:
+    e403: Where are you going ? It's forbidden
+    e404: Are you lost ?
+    e405: You broke it !

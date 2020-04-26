@@ -30,3 +30,8 @@ produit:
     title: "Produits"
     create: "Créer un produit"
     addCart: "Selectioner la quantité à ajouter"
+
+Error:
+    e403: Tu vas où ? C'est interdit
+    e404: Tu t'es perdu ?
+    e405: Tu l'as cassé !
