@@ -36,3 +36,10 @@ Error:
     e403: Where are you going ? It's forbidden
     e404: Are you lost ?
     e405: You broke it !
+
+Compte:
+    name: Name
+    lastname: Lastname
+    email: E-mail
+    price: Price
+    date: Date of Bought
